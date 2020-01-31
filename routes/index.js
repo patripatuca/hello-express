@@ -4,7 +4,8 @@ var products=require("../models/products.js")
 var users =require('../models/users.js');
 /* GET home page. */
 router.get('/', function(req,res,next){
-  res.render('index',{title: 'to home Patri', products});
+  const username=req.session.username;
+  res.render('index',{title: 'to home Patri', username,products});
 });
 
 router.get('/products/:ref', function(req, res, next) {
@@ -59,7 +60,7 @@ router.get("/login", function (req, res, next) {
 
 router.post("/login",function(req,res,next){
   const username=req.body.username;
-  const passwortd=req.body.pasword;
+  const password=req.body.password;
   //const{username,password}=req.body;
   const user=users.find(function(u){
    //  if(u.username==username&& u.password==password){
@@ -68,12 +69,14 @@ router.post("/login",function(req,res,next){
     //   return false;
     // }
     //}); es lo mismo que:
-     return (u.username==user && u.password==password);
+     return (u.username==username && u.password==password);
   });
   if (user){
     //todo:generar cookie
+    req.session.username=username;
     res.redirect("/");
   }else{
+    //Todo:inyectar mensaje de error a pantalla
     res.render("login");
   }
 
