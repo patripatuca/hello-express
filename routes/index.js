@@ -1,30 +1,34 @@
 var express = require('express');
 var router = express.Router();
-var products=require("../models/products.js")
 var users =require('../models/users.js');
+
+const{Producto}=require('../models');
+
 /* GET home page. */
 router.get('/', function(req,res,next){
   const username=req.session.username;
-  res.render('index',{title: 'to home Patri', username,products});
-});
 
+  Producto.findAll().then(products=>{
+    console.log(products);
+    res.render('index',{title: 'to home Patri', username,products});
+  })
+ 
+});
+//página con los detalles de  un producto según su referencia.
 router.get('/products/:ref', function(req, res, next) {
   //obtengo la ref del producto a partir de la ruta//
   var ref=req.params.ref;
-  //busco entre los productos el que coincide con la ref//
-  const product=products.find(function(p){
-    return p.ref==ref;
-  });
 
-  if(product){
-    res.render('product',{product});
-  }else{
-    res.redirect("/error");
-  }
-
-  
-   //pasamos los datos del producto a la palntilla 
-  
+  Producto.findOne({
+    where:{ref}
+  })
+  .then(product =>{
+    if(product){
+      res.render('product',{product});
+    }else{
+      res.redirect("/error");
+    }
+  })  
 });
 var cesta = []; //provisional
 
