@@ -4,13 +4,16 @@ const Carrito=require('./carrito.js');
 const Pedido=require('./Pedido.js');
 const sequelize=require('./db');
 
+Usuario.hasOne(Carrito);
+Carrito.belongsTo(Usuario);
+
 
 //finalmente conectamos con la base de datos
 sequelize
   .authenticate()
   .then(() => {
     console.log('Connection has been established successfully.');
-    sequelize.sync();//crea las tablas si no existen
+    sequelize.sync({alter:true});//crea las tablas si no existen
   })
   .catch(err => {
     console.error('Unable to connect to the database:', err);
