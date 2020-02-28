@@ -1,4 +1,5 @@
 const Producto=require('./products');
+const Usuario=require('./users.js');
 const sequelize=require('./db');
 
 
@@ -14,8 +15,8 @@ sequelize
   });
 
   module.exports={
-    Producto
-    //pedido,
+    Producto,
+    Usuario
     //usuario,
     //carrito
   }

@@ -17,7 +17,7 @@ router.get('/', function(req,res,next){
 //página con los detalles de  un producto según su referencia.
 router.get('/products/:ref', function(req, res, next) {
   //obtengo la ref del producto a partir de la ruta//
-  var ref=req.params.ref;
+  var ref=req.params.ref  ;
 
   Producto.findOne({
     where:{ref}
