@@ -63,27 +63,20 @@ router.get("/login", function (req, res, next) {
 //
 
 router.post("/login",function(req,res,next){
-  const nombreusername=req.body.username;
-  const password=req.body.password;
-  //const{username,password}=req.body;
-  const user=users.find(function(u){
-   //  if(u.username==username&& u.password==password){
-    //    return true;
-    // }else{
-    //   return false;
-    // }
-    //}); es lo mismo que:
-     return (u.username==username && u.password==password);
-  });
-  if (user){
-    //todo:generar cookie
-    req.session.username=username;
-    res.redirect("/");
-  }else{
-    //Todo:inyectar mensaje de error a pantalla
-    res.render("login");
-  }
-})
+  const{email,password}=req.body;
+  Usuario.findOne({where:{email,password}})
+  .then(usuario=>{
+    if (usuario){
+      //todo:generar cookie
+      req.session.usuarioId= usuario.id;
+      res.redirect("/");
+    }else{
+      //Todo:inyectar mensaje de error a pantalla
+      res.render("login");
+    }
+  })
+  
+});
   router.get("/registro",function(req,res,next){
     res.render("registro");
   });
