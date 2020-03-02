@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 var users =require('../models/users.js');
 
-const{Producto}=require('../models');
+const{Producto,Usuario}=require('../models');
 
 /* GET home page. */
 router.get('/', function(req,res,next){
@@ -63,7 +63,7 @@ router.get("/login", function (req, res, next) {
 //
 
 router.post("/login",function(req,res,next){
-  const username=req.body.username;
+  const nombreusername=req.body.username;
   const password=req.body.password;
   //const{username,password}=req.body;
   const user=users.find(function(u){
@@ -83,8 +83,25 @@ router.post("/login",function(req,res,next){
     //Todo:inyectar mensaje de error a pantalla
     res.render("login");
   }
+})
+  router.get("/registro",function(req,res,next){
+    res.render("registro");
+  });
+  router.post("/registro",function(req,res,next){
+    const datos=req.body;
+  
+    if(datos.password==datos.repassword){
+     Usuario.create(datos) 
+     .then(usuario=>{
+       res.redirect("/login");
+     })
+    
 
-});
-
+    }else{
+      res.redirect('/registro');
+    }
+ });
+    
 
 module.exports = router;
+
