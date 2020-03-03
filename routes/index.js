@@ -78,7 +78,7 @@ router.post("/login",function(req,res,next){
   
 });
   router.get("/registro",function(req,res,next){
-    res.render("registro",{error:undefined});
+    res.render("registro",{error:undefined ,datos:{} });
   });
   router.post("/registro",function(req,res,next){
     const datos=req.body;
@@ -88,8 +88,11 @@ router.post("/login",function(req,res,next){
       if(datos.apellidos.length==0){
       res.render("registro",{datos,error:"Apellidos no puede estar vacio"});
       }else
+      
       if (datos.email.length==0){
        res.render("registro",{datos,error:"El email no debe de estar vacio "});
+      }else if(!/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(datos.email)){
+        res.render("registro",{datos,error:"error no valido"});
       }else
       if(datos.password.length<6){
        res.render("registro",{datos,error:"El password ha de tener al menos 6 caracteres"});

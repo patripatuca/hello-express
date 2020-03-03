@@ -37,16 +37,16 @@
     <form action="/registro" method="post">
         <h2 class="text-center">Log in</h2>       
        <div class="form-group"> 
-            <input type ="text" name="nombre" class="form-control" placeholder="nombre">
+            <input type ="text" name="nombre" class="form-control" placeholder="nombre" value="<%= datos.nombre %>">
         </div>
         <div class="form-group"> 
-            <input type="text" name="apellidos" class="form-control" placeholder="apellidos">
+            <input type="text" name="apellidos" class="form-control" placeholder="apellidos" value="<%= datos.apellidos %>">
         </div> 
         <div class="form-group"> 
-            <input type="text" name="email" class="form-control" placeholder="email">
+            <input type="text" name="email" class="form-control" placeholder="email" value="<%= datos.email %>">
         </div>
         <div class="form-group"> 
-            <input type="password" name="password" class="form-control" placeholder="Password">
+            <input type="password" name="password" class="form-control" placeholder="Password" >
         </div>
         
             <div class="form-group"> 
