@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 var users =require('../models/users.js');
 
-const{Producto,Usuario}=require('../models');
+const{Producto,Usuario,Carrito}=require('../models');
 
 /* GET home page. */
 router.get('/', function(req,res,next){
@@ -29,22 +29,34 @@ router.get('/products/:ref', function(req, res, next) {
       res.redirect("/error");
     }
   })  
-});
-var cesta = []; //provisional
+})
 
  router.post("/comprar", function (req, res, next) {
    const ref = req.body.ref;
+   const usuarioId=req.session.usuarioId;
+   if(usuarioId) {
+ // Busco entre los productos el que coincide con la referencia
+   Producto.findOne({where:{ref}})
+   .then(producto=> {
+      if(producto){
+        //localizamos carrito y ponemos producto en carrito
+        Carrito.findOrCreate({where:{usuarioId},defaults:{usuarioId}})
+        .then(([carrito,created])=> {
+          carrito.addProducto(producto)
+          .then(()=>{
+            res.redirect("/");
+          })
+        })  
+      }else{
+        //mostrar página de error
+        res.render("error",{message:"no existe el producto solicitado"});
+      }
 
-   // Busco entre los productos el que coincide con la referencia
-   const product = products.find(function(p) { 
-     return p.ref==ref; 
-   });
-
-   // Añadimos producto a la cesta
-   cesta.push(product);
-   // Redirigimos a página de productos
-   res.redirect("/");
- });
+   })
+  }else{
+    res.redirect("/login");
+  }
+ })
 
  router.get("/login", function (req, res, next) {
    res.render("login");
@@ -106,7 +118,11 @@ router.post("/login",function(req,res,next){
      });
     }
      
-  });    
+  }); 
+  router.get("/carrito", function(req,res,next){
+    res.render("carrito");
+  }) 
+
 
 module.exports = router;
 
