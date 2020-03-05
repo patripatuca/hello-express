@@ -40,12 +40,25 @@ router.get('/products/:ref', function(req, res, next) {
    .then(producto=> {
       if(producto){
         //localizamos carrito y ponemos producto en carrito
-        Carrito.findOrCreate({where:{usuarioId},defaults:{usuarioId}})
+        Carrito.findOrCreate({where:{usuarioId}, include:[Producto],defaults:{usuarioId}})
         .then(([carrito,created])=> {
+          var productos=carrito.productos;
+          //quiero buscar ese producto y ver si está en el carrito.Tenemos que recorrer el array .
+          var p=productos.find(p=> p.ref==ref);
+          if(p) {
+            //artículo ya en carrito, incrementamos cantidad
+            p.productocarrito.increment({cantidad:1})
+            .then(()=>{
+              res.redirect("/");
+            });
+          }else{
+            
+          
           carrito.addProducto(producto)
           .then(()=>{
             res.redirect("/");
           })
+        }
         })  
       }else{
         //mostrar página de error
