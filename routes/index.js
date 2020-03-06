@@ -49,14 +49,14 @@ router.get('/products/:ref', function(req, res, next) {
             //artículo ya en carrito, incrementamos cantidad
             p.productocarrito.increment({cantidad:1})
             .then(()=>{
-              res.redirect("/");
+              res.redirect("carrito");
             });
           }else{
             
           
           carrito.addProducto(producto)
           .then(()=>{
-            res.redirect("/");
+            res.redirect("carrito");
           })
         }
         })  
