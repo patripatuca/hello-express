@@ -140,8 +140,9 @@ router.post("/login",function(req,res,next){
     } else{
       Carrito.findOne({where:{usuarioId}, include:[Producto]})
       .then(carrito => { 
-        var productos=carrito.productos;
-        res.render("carrito",{productos});
+        const productos = carrito.productos;
+        const total = productos.reduce((total, p) => total + p.precio * p.productocarrito.cantidad, 0);
+        res.render("carrito", {productos, total})
       })
      
     }

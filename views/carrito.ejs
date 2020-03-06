@@ -41,14 +41,15 @@
 <tr>
         <td><%= productos[i].ref %></td> 
         <td><%= productos[i].nombre %></td>
-        <td><%= productos[i].precio %></td> 
         <td><%= productos[i].productocarrito.cantidad %></td> 
+        <td><%= productos[i].precio %></td> 
         <td><%= productos[i].productocarrito.cantidad * productos[i].precio %></td> 
         </tr>
         <% } %> 
 
         </table>
-        <p><h3>TOTAL</h3</p>
+        <h2>TOTAL--------<th><%= total %></th></h2> 
+       
 <br>
 <br>
             <a href="/">seguir comprando</a>
