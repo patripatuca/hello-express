@@ -37,12 +37,16 @@
         
         <table class="tftable" border="1">
         <tr><th>Ref</th><th>Nombre</th><th>Uds</th><th>P/U</th><th>Subtotal</th></tr>
-        <tr> <td></td> <td></td> <td></td> <td></td> <td></td> </tr>
-        <tr> <td></td> <td></td> <td></td> <td></td> <td></td> </tr>
-        <tr> <td></td> <td></td> <td></td> <td></td> <td></td> </tr>
-        <tr> <td></td> <td></td> <td></td> <td></td> <td></td> </tr>
-        <tr> <td></td> <td></td> <td></td> <td></td> <td></td> </tr>
-        <tr> <td></td> <td></td> <td></td> <td></td> <td></td> </tr>
+        <% for(var i=0; i<productos.length; i++) { %>
+<tr>
+        <td><%= productos[i].ref %></td> 
+        <td><%= productos[i].nombre %></td>
+        <td><%= productos[i].precio %></td> 
+        <td><%= productos[i].productocarrito.cantidad %></td> 
+        <td><%= productos[i].productocarrito.cantidad * productos[i].precio %></td> 
+        </tr>
+        <% } %> 
+
         </table>
         <p><h3>TOTAL</h3</p>
 <br>
