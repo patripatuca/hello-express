@@ -31,25 +31,40 @@
             margin-right: 20px;
 
         }
+        .error{
+            font-family:Verdana, Geneva, Tahoma, sans-serif;
+            font-style:italic;
+            font-style:oblique;
+            background-color: crimson;
+        }
 
         </style>
         <p>CARRITO</p>
         
         <table class="tftable" border="1">
-        <tr><th>Ref</th><th>Nombre</th><th>Uds</th><th>P/U</th><th>Subtotal</th></tr>
+        <tr><th>Ref</th><th>Nombre</th><th>p/u</th><th>uds</th><th>Subtotal</th></tr>
         <% for(var i=0; i<productos.length; i++) { %>
+            <% if(productos[i].hayExistencias==false) { %>
+                <tr>
+                    <td><%= productos[i].ref %></td> 
+                    <td><%= productos[i].nombre %></td> 
+                    <td class="error" colspan="3">No hay suficientes existencias</td> 
+                </tr>
+                <% } else { %>
+
 <tr>
         <td><%= productos[i].ref %></td> 
         <td><%= productos[i].nombre %></td>
-        <td><%= productos[i].productocarrito.cantidad %></td> 
         <td><%= productos[i].precio %></td> 
-        <td><%= productos[i].productocarrito.cantidad * productos[i].precio %></td> 
+        <td><%= productos[i].productocarrito.cantidad %></td> 
+        <td><%= productos[i].productocarrito.cantidad * productos[i].precio %></td>
+        
         </tr>
+        <% } %>
         <% } %> 
 
         </table>
-        <h2>TOTAL--------<th><%= total %></th></h2> 
-       
+        <p><h3>TOTAL</h3</p>
 <br>
 <br>
             <a href="/">seguir comprando</a>
