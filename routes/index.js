@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 var users =require('../models/users.js');
 
-const{Producto,Usuario,Carrito}=require('../models');
+const{Producto,Usuario,Carrito,Pedido,sequelize}=require('../models');
 
 /* GET home page. */
 router.get('/', function(req,res,next){
@@ -155,22 +155,41 @@ router.post("/login",function(req,res,next){
     if(!usuarioId) {
      res.redirect("/login");
     }else{
-      Carrito.findOne({where:{usuarioId},include: [Producto]})
+      sequelize.transaction(t=> {
+      
+        return Carrito.findOne({where:{usuarioId},include: [Producto]},{transaction:t})
       .then(carrito => {
         const productos=carrito.productos;
         if(productos.every(p=>p.existencias>=p.productocarrito.cantidad)){
             //TODO: niveles de existencias OK, crear nuevo pedido con los productos
+            return Pedido.create({usuarioId,estado:'PDTE_PAGO'},{transaction:t})
+            .then (pedido=> {
+              pedido.addProductos(productos,{transaction:t})
+              .then(()=>carrito.removeProductos(productos,{transaction:t})
+                
+                .then(() =>t.commit())
+                .then(() =>res.redirect("/pedido/"+pedido.id))
+                              
+              )
+            })
+            
+          
+
       } else {
         //TODO: mostrar un mensaje diciendo que no hay existencias suficientes
         for(var i=0;i<productos.length;i++){
           productos[i].hayExistencias=productos[i].existencias>=productos[i].productocarrito.cantidad;
         }
         const total = productos.reduce((total, p) => total + p.precio * p.productocarrito.cantidad, 0);
-        res.render("carrito",{productos, total});
+        return t.rollback()
+       .then(()=> res.render("carrito",{productos, total}));
       }
     })
-  }
-});
+  })
+}
+
+})
+  
 
   
 
